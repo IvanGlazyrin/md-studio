@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" width="720" height="220" role="img" aria-label="Схема модулей MD Studio">
+  <rect width="720" height="220" fill="#0b1220"/>
+  <g font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" fill="#e2e8f0">
+    <rect x="16" y="24" width="132" height="52" rx="8" fill="#132033" stroke="#38bdf8"/>
+    <text x="30" y="46">Папка с .md</text>
+    <text x="30" y="64" fill="#7dd3fc">DOCS_DIR</text>
+    <rect x="180" y="24" width="132" height="52" rx="8" fill="#132033" stroke="#38bdf8"/>
+    <text x="194" y="46">Индексатор</text>
+    <text x="194" y="64" fill="#7dd3fc">lib/vault</text>
+    <rect x="344" y="24" width="140" height="52" rx="8" fill="#132033" stroke="#38bdf8"/>
+    <text x="358" y="46">MDX-компилятор</text>
+    <text x="358" y="64" fill="#7dd3fc">wikilinks</text>
+    <rect x="516" y="24" width="188" height="52" rx="8" fill="#132033" stroke="#38bdf8"/>
+    <text x="530" y="46">Страница + TODO</text>
+    <text x="530" y="64" fill="#7dd3fc">doc-todos.json</text>
+    <path d="M148 50h32M312 50h32M484 50h32" stroke="#38bdf8" stroke-width="2"/>
+    <text x="16" y="120" fill="#94a3b8">Меню и поиск строятся из той же папки: ни одной кнопки «обновить список».</text>
+    <text x="16" y="146" fill="#94a3b8">Все страницы — статическая генерация, поиск работает на клиенте (MiniSearch).</text>
+    <text x="16" y="172" fill="#94a3b8">Картинки отдаёт один маршрут с проверкой пути на выход за пределы папки.</text>
+  </g>
+</svg>

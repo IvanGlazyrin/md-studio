@@ -1,0 +1,429 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* The app ships dark-only with `.dark` on <html>; keep `dark:` working for any
+   shadcn component that scopes itself to it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Design tokens ─────────────────────────────────────────────────────────
+   shadcn/ui token contract (space-separated HSL channels declared below on
+   :root, consumed as `hsl(var(--token))`), so shadcn components can be
+   dropped in unchanged. `bg-card/60` and friends work because v4 applies
+   opacity via color-mix, which is fine with any color value. */
+@theme {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  /* Kept so existing `cyber-*` usages resolve; prefer the tokens above. */
+  --color-cyber-bg: #090d16;
+  --color-cyber-card: #0f172a;
+  --color-cyber-border: #1e293b;
+  --color-cyber-cyan: #00f0ff;
+  --color-cyber-amber: #f59e0b;
+  --color-cyber-neon: #38bdf8;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* next/font exposes the IBM Plex families as --font-plex-*; never name a
+     theme key the same as a variable it references (self-reference is
+     invalid at computed-value time). */
+  --font-sans: var(--font-plex-sans), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+:root,
+.dark {
+  --background: 222 42% 6%; /* #090d16 */
+  --foreground: 214 32% 91%; /* #e2e8f0 — body copy, softer than pure white */
+
+  --card: 222 47% 11%; /* #0f172a */
+  --card-foreground: 210 40% 98%; /* #f8fafc — headings and emphasis */
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+
+  --primary: 184 100% 50%; /* #00f0ff */
+  --primary-foreground: 222 47% 8%;
+
+  --secondary: 217 33% 17%; /* #1e293b */
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%; /* #94a3b8 */
+
+  --accent: 38 92% 50%; /* #f59e0b */
+  --accent-foreground: 222 47% 8%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 210 40% 98%;
+
+  --border: 217 33% 18%;
+  --input: 217 33% 18%;
+  --ring: 184 100% 50%;
+
+  --radius: 0.5rem;
+}
+
+@layer base {
+  /* Tailwind's preflight resets every border to `currentColor`, which is why
+     markdown tables render without visible rules. Default them to the token. */
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+/* ── Rendered document ─────────────────────────────────────────────────
+   Prose keeps a ~78-character measure; tables, code blocks and diagrams are
+   allowed the full column because they carry data, not sentences.
+
+   `.prose-docs` used to be a typography-plugin modifier defined in
+   tailwind.config.ts. In v4 it is plain CSS: it sits in no @layer, so it
+   outranks the plugin's layered `.prose` rules, and every selector here is
+   more specific than the plugin's `:where()`-softened equivalents. */
+.prose-docs {
+  --tw-prose-body: hsl(var(--foreground));
+  --tw-prose-headings: hsl(var(--card-foreground));
+  --tw-prose-lead: hsl(var(--muted-foreground));
+  --tw-prose-links: hsl(var(--primary));
+  --tw-prose-bold: hsl(var(--card-foreground));
+  --tw-prose-counters: hsl(var(--primary));
+  --tw-prose-bullets: hsl(var(--primary) / 0.55);
+  --tw-prose-hr: hsl(var(--border));
+  --tw-prose-quotes: hsl(var(--muted-foreground));
+  --tw-prose-quote-borders: hsl(var(--border));
+  --tw-prose-captions: hsl(var(--muted-foreground));
+  --tw-prose-kbd: hsl(var(--card-foreground));
+  --tw-prose-kbd-shadows: 0 0 0 0;
+  --tw-prose-code: hsl(var(--primary));
+  --tw-prose-pre-code: hsl(var(--foreground));
+  --tw-prose-pre-bg: hsl(var(--background));
+  --tw-prose-th-borders: hsl(var(--border));
+  --tw-prose-td-borders: hsl(var(--border));
+
+  /* The reading column is set on the container, not here. */
+  max-width: none;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+
+  /* --- Rhythm: the main readability fix ------------------------------- */
+  & p {
+    margin-top: 1.15em;
+    margin-bottom: 1.15em;
+  }
+  & :is(ul, ol) {
+    margin-top: 1.15em;
+    margin-bottom: 1.15em;
+    padding-inline-start: 1.5em;
+  }
+  & li {
+    margin-top: 0.45em;
+    margin-bottom: 0.45em;
+    padding-inline-start: 0.35em;
+  }
+  & li > p {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+  }
+  & li > :is(ul, ol) {
+    margin-top: 0.45em;
+    margin-bottom: 0.45em;
+  }
+  & ul > li::marker {
+    color: hsl(var(--primary) / 0.55);
+  }
+  & ol > li::marker {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  & hr {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    border-color: hsl(var(--border));
+  }
+  & :is(h1, h2, h3, h4) {
+    text-wrap: balance;
+  }
+
+  /* --- Inline code ---------------------------------------------------- */
+  & code {
+    background-color: hsl(var(--muted) / 0.55);
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.3rem;
+    padding: 0.12em 0.38em;
+    font-weight: 500;
+    font-size: 0.875em;
+    /* `break-word`, not `anywhere`: long paths still wrap when they
+       would overflow, but table columns keep sizing to the filename
+       instead of shattering it mid-word. */
+    overflow-wrap: break-word;
+  }
+  & code::before {
+    content: "";
+  }
+  & code::after {
+    content: "";
+  }
+  & pre code {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+  }
+  & kbd {
+    background-color: hsl(var(--muted) / 0.7);
+    border: 1px solid hsl(var(--border));
+    border-bottom-width: 2px;
+    border-radius: 0.3rem;
+    padding: 0.15em 0.45em;
+    font-size: 0.8125em;
+  }
+
+  /* --- Tables: visible grid, header on the raised surface ------------- */
+  & table {
+    width: 100%;
+    margin: 0;
+    font-size: 0.9375em;
+    line-height: 1.6;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+  }
+  & thead {
+    background-color: hsl(var(--secondary));
+    border-bottom-color: hsl(var(--border));
+  }
+  & thead th {
+    color: hsl(var(--card-foreground));
+    font-weight: 600;
+    text-align: start;
+    vertical-align: bottom;
+    padding: 0.7em 0.9em;
+    border: 1px solid hsl(var(--border));
+  }
+  & :is(tbody td, tfoot td) {
+    padding: 0.65em 0.9em;
+    vertical-align: top;
+    border: 1px solid hsl(var(--border));
+  }
+  & tbody tr {
+    border-bottom-color: hsl(var(--border));
+  }
+  & tbody tr:nth-child(even) {
+    background-color: hsl(var(--muted) / 0.22);
+  }
+  & tbody tr:last-child {
+    border-bottom-width: 1px;
+  }
+}
+
+@layer components {
+  .doc-content > * {
+    max-width: 42rem;
+  }
+
+  .doc-content > .doc-table,
+  .doc-content > pre,
+  .doc-content > figure,
+  .doc-content > .callout {
+    max-width: 100%;
+  }
+
+  /* Horizontally scrollable frame around markdown tables. */
+  .doc-content .doc-table {
+    margin: 1.75em 0;
+    overflow-x: auto;
+    border: 1px solid hsl(var(--border));
+    border-radius: var(--radius);
+    background-color: hsl(var(--card));
+  }
+
+  .doc-content .doc-table:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Thumbnails in cells must not inherit the block-image rhythm. */
+  .doc-content .doc-table img {
+    margin: 0;
+    border-radius: calc(var(--radius) - 2px);
+  }
+
+  .doc-content .doc-table :is(p, ul, ol) {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  /* KaTeX formula rendering adjustments */
+  .doc-content .katex {
+    font-size: 1.05em;
+    color: inherit;
+  }
+
+  .doc-content .katex-display {
+    margin: 1.25em 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  /* P2.2 / Бэклог 2.2: несуществующие вики-ссылки [[Страница]] рендерятся как
+     span, а не 404-ссылка. Заголовок объясняет, почему переход невозможен.
+
+     `border-bottom-*` is written longhand rather than as the
+     `border-bottom: 1px dashed …` shorthand because the regression test greps
+     the source text for `border-bottom-style: dashed`, which a shorthand never
+     contains. The computed result is identical either way.
+
+     The span emits this class and no Tailwind utilities: utilities land in
+     `@layer utilities`, ordered after this layer, and layer order is evaluated
+     before specificity — so a utility on the same element would shadow this rule
+     and make `:hover` unreachable. Keep it that way. */
+  .ghost-link {
+    color: var(--color-zinc-500);
+    cursor: not-allowed;
+    border-bottom-width: 1px;
+    border-bottom-style: dashed;
+    border-bottom-color: var(--color-zinc-600);
+    text-decoration: none;
+  }
+
+  .ghost-link:hover {
+    color: var(--color-zinc-400);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Code Block & Syntax Highlighting (Prism theme) ───────────────────────── */
+.code-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border) / 0.8) transparent;
+}
+
+.code-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.code-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.code-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--border) / 0.8);
+  border-radius: 9999px;
+}
+
+.code-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.6);
+}
+
+/* Syntax token styling matching the dark studio aesthetic */
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #64748b;
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: #94a3b8;
+}
+
+.token.keyword {
+  color: #c084fc;
+  font-weight: 600;
+}
+
+.token.annotation,
+.token.builtin {
+  color: #f59e0b;
+  font-weight: 500;
+}
+
+.token.function {
+  color: #38bdf8;
+}
+
+.token.class-name {
+  color: #fbbf24;
+}
+
+.token.string,
+.token.char,
+.token.attr-value {
+  color: #4ade80;
+}
+
+.token.number,
+.token.boolean {
+  color: #fb923c;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+  color: #2dd4bf;
+}
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol {
+  color: #f43f5e;
+}
+
+.token.variable {
+  color: #93c5fd;
+}
+
+.token.important,
+.token.bold {
+  font-weight: 700;
+}
+
+.token.italic {
+  font-style: italic;
+}
+

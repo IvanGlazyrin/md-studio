@@ -1,0 +1,22 @@
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# Локальное окружение
+.env
+.env.local
+.env.*.local
+
+# TODO-заметки: состояние приложения, не исходники
+data/doc-todos.json
+
+# Сборка десктопного приложения
+release/
+
+# Прочее
+.DS_Store
+Thumbs.db
+*.log
