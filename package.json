@@ -7,12 +7,15 @@
   "description": "Next.js 16 studio for a local Markdown vault: wikilinks, search, callouts and inline TODOs",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "next build && node scripts/prepare-standalone.mjs",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "docs:stats": "node --no-warnings scripts/analyze-text.ts"
+    "docs:stats": "node --no-warnings scripts/analyze-text.ts",
+    "desktop": "electron electron/main.cjs",
+    "desktop:build": "npm run build && electron-builder --dir",
+    "desktop:dist": "npm run build && electron-builder"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.0",
@@ -54,6 +57,64 @@
     "tailwindcss": "^4.3.3",
     "typescript": "npm:@typescript/typescript6@^6.0.2",
     "unified": "^11.0.5",
-    "vitest": "^5.0.1"
-  }
+    "vitest": "^5.0.1",
+    "electron": "^40.0.0",
+    "electron-builder": "^26.0.12",
+    "concurrently": "^9.1.2"
+  },
+  "build": {
+    "appId": "com.ivanlazyrin.mdstudio",
+    "productName": "MD Studio",
+    "copyright": "Copyright (c) 2026 Ivan Glazyrin",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      "package.json",
+      ".next/standalone/**/*",
+      "vault/**/*",
+      "!node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.developer-tools"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Development"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true
+    },
+    "asar": false
+  },
+  "main": "electron/main.cjs"
 }

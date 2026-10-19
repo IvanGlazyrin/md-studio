@@ -5,6 +5,7 @@ import { buildIndex } from "@/lib/vault/indexer";
 import { buildNav, type NavSection } from "@/lib/vault/navigation";
 import { DocsSearch } from "@/components/docs/DocsSearch";
 import { DocsNavProvider, DocsNavTrigger, DocsSidebar } from "@/components/docs/DocsNav";
+import { VaultPicker } from "@/components/docs/VaultPicker";
 import { VAULT_DIR } from "@/lib/vault/config";
 import type { SearchDoc } from "@/lib/vault/search";
 
@@ -50,6 +51,7 @@ export default async function DocsLayout({ children }: { children: React.ReactNo
             >
               📁 {vaultName}
             </span>
+            <VaultPicker />
             <DocsSearch documents={searchDocs} />
           </div>
         </header>
